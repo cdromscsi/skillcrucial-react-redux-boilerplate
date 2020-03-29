@@ -2,7 +2,7 @@ const { resolve } = require('path')
 require('dotenv').config()
 const webpack = require('webpack')
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
 const StringReplacePlugin = require('string-replace-webpack-plugin')
@@ -19,8 +19,9 @@ const config = {
   },
   output: {
     filename: 'js/bundle.js',
-    path: resolve(__dirname, 'dist/assets'),
-    publicPath: ''
+    path: resolve(__dirname, 'dist/assets')
+    // by default: publicPath = ''
+    // publicPath: ''
   },
   mode: 'production',
   context: resolve(__dirname, 'client'),
@@ -67,11 +68,21 @@ const config = {
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader'],
-          publicPath: '../_build'
-        })
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../'
+            }
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              // by default: sourceMap = false
+              // sourceMap: false
+            }
+          }
+        ]
       },
       {
         test: /\.txt$/i,
@@ -80,19 +91,32 @@ const config = {
       {
         test: /\.scss$/,
         exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            'css-loader',
-            {
-              loader: 'sass-loader',
-              query: {
-                sourceMap: false
-              }
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../'
             }
-          ],
-          publicPath: '../'
-        })
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              // by default: sourceMap = false
+              // sourceMap: false
+            }
+          },
+          {
+            loader: 'sass-loader'
+            // query supported but has been deprecated
+            // query: {
+            //   sourceMap: false
+            // }
+            // sourceMap default: depends on the compiler.devtool value
+            // options: {
+            //   sourceMap: false
+            // }
+          }
+        ]
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -184,7 +208,11 @@ const config = {
       }
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new ExtractTextPlugin({ filename: 'css/main.css', disable: false, allChunks: true }),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css',
+      chunkFilename: 'css/[id].css',
+      ignoreOrder: false
+    }),
     new CopyWebpackPlugin([{ from: 'assets/images', to: 'images' }]),
     new CopyWebpackPlugin([{ from: 'assets/fonts', to: 'fonts' }]),
     new CopyWebpackPlugin([{ from: 'vendors', to: 'vendors' }]),
