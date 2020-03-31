@@ -29,6 +29,18 @@ const config = {
     // by default: publicPath = ''
     // publicPath: ''
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
+  },
   mode: 'development',
   context: resolve(__dirname, 'client'),
   devServer: {
