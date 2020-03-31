@@ -1,14 +1,21 @@
-const { resolve } = require('path')
+/* eslint-disable import/no-extraneous-dependencies */
+const path = require('path')
+const glob = require('glob')
 require('dotenv').config()
 const webpack = require('webpack')
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const PurgecssPlugin = require('purgecss-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
 const StringReplacePlugin = require('string-replace-webpack-plugin')
 const uuidv4 = require('uuid/v4')
 
 const gitRevisionPlugin = new GitRevisionPlugin()
+
+const PATHS = {
+  client: path.join(__dirname, 'client')
+}
 
 const config = {
   entry: ['./main.js', './assets/scss/main.scss'],
@@ -19,7 +26,7 @@ const config = {
   },
   output: {
     filename: 'js/bundle.js',
-    path: resolve(__dirname, 'dist/assets')
+    path: path.resolve(__dirname, 'dist/assets')
     // by default: publicPath = ''
     // publicPath: ''
   },
@@ -36,7 +43,7 @@ const config = {
     }
   },
   mode: 'production',
-  context: resolve(__dirname, 'client'),
+  context: path.resolve(__dirname, 'client'),
   devtool: false,
   performance: {
     hints: false,
@@ -214,7 +221,7 @@ const config = {
       test: /\.js$/,
       options: {
         eslint: {
-          configFile: resolve(__dirname, '.eslintrc'),
+          configFile: path.resolve(__dirname, '.eslintrc'),
           cache: false
         }
       }
@@ -224,6 +231,9 @@ const config = {
       filename: 'css/[name].css',
       chunkFilename: 'css/[id].css',
       ignoreOrder: false
+    }),
+    new PurgecssPlugin({
+      paths: glob.sync(`${PATHS.client}/**/*`, { nodir: true })
     }),
     new CopyWebpackPlugin([{ from: 'assets/images', to: 'images' }]),
     new CopyWebpackPlugin([{ from: 'assets/fonts', to: 'fonts' }]),

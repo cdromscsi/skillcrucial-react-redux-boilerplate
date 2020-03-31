@@ -135,6 +135,7 @@
     "node-sass": "^4.13.0",
     "nodemon": "^2.0.1",
     "prettier": "2.0.2",
+    "purgecss-webpack-plugin": "^2.1.0",
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "16.12.0",
     "regenerator-runtime": "^0.13.3",
