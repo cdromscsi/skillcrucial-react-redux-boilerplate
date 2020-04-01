@@ -22,8 +22,8 @@
     "next:build": "next",
     "storybook": "start-storybook --port 6006",
     "watch:server": "nodemon start.js --ignore \"*.hot-update.json\" --ignore \"js/bundle.js\" --ignore \"css/main.css\" --watch server --watch client --exec \"npm run lint:server && node\"",
-    "build:prod": " webpack --config webpack.production.frontend.config.js --progress --profile --colors",
-    "heroku-postbuild": " webpack --config webpack.production.frontend.config.js --progress --profile --colors"
+    "build:prod": "cross-env NODE_ENV=production webpack --config webpack.production.frontend.config.js --progress --profile --colors",
+    "heroku-postbuild": "yarn run build:prod"
   },
   "author": "",
   "license": "MIT",
@@ -81,7 +81,6 @@
     "cookie-parser": "^1.4.4",
     "core-js": "^3.4.5",
     "cors": "^2.8.5",
-    "cross-env": "^6.0.3",
     "d3": "^5.14.2",
     "dotenv": "^8.2.0",
     "es6-promise": "^4.2.8",
@@ -116,6 +115,7 @@
     "@storybook/react": "^5.3.17",
     "autoprefixer": "^9.7.5",
     "copy-webpack-plugin": "^5.0.5",
+    "cross-env": "^7.0.2",
     "css-loader": "3.2.0",
     "cssnano": "^4.1.10",
     "eslint": "^6.7.1",
