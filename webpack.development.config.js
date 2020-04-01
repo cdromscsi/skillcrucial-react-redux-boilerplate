@@ -96,6 +96,13 @@ const config = {
               // by default: sourceMap = false
               // sourceMap: false
             }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: [require('autoprefixer')()]
+            }
           }
         ]
       },
@@ -119,6 +126,13 @@ const config = {
             options: {
               // by default: sourceMap = false
               // sourceMap: false
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: [require('autoprefixer')()]
             }
           },
           {
