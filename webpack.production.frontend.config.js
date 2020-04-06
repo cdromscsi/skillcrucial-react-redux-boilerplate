@@ -108,7 +108,11 @@ const config = {
             loader: 'postcss-loader',
             options: {
               ident: 'postcss',
-              plugins: [require('autoprefixer')(), require('cssnano')()]
+              plugins: (loader) => [
+                require('postcss-import')({ root: loader.resourcePath }),
+                require('autoprefixer')(),
+                require('cssnano')()
+              ]
             }
           }
         ]
@@ -138,7 +142,11 @@ const config = {
             loader: 'postcss-loader',
             options: {
               ident: 'postcss',
-              plugins: [require('autoprefixer')(), require('cssnano')()]
+              plugins: (loader) => [
+                require('postcss-import')({ root: loader.resourcePath }),
+                require('autoprefixer')(),
+                require('cssnano')()
+              ]
             }
           },
           {

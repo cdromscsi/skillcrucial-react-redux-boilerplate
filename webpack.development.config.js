@@ -101,7 +101,10 @@ const config = {
             loader: 'postcss-loader',
             options: {
               ident: 'postcss',
-              plugins: [require('autoprefixer')()]
+              plugins: (loader) => [
+                require('postcss-import')({ root: loader.resourcePath }),
+                require('autoprefixer')()
+              ]
             }
           }
         ]
@@ -132,7 +135,10 @@ const config = {
             loader: 'postcss-loader',
             options: {
               ident: 'postcss',
-              plugins: [require('autoprefixer')()]
+              plugins: (loader) => [
+                require('postcss-import')({ root: loader.resourcePath }),
+                require('autoprefixer')()
+              ]
             }
           },
           {
