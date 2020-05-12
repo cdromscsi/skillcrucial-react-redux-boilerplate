@@ -10,7 +10,6 @@ const TerserJSPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
-const StringReplacePlugin = require('string-replace-webpack-plugin')
 const uuidv4 = require('uuid/v4')
 
 const gitRevisionPlugin = new GitRevisionPlugin()
@@ -28,9 +27,18 @@ const config = {
   },
   output: {
     filename: 'js/bundle.js',
+    chunkFilename: 'js/[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist/assets')
     // by default: publicPath = ''
     // publicPath: ''
+  },
+  mode: 'production',
+  context: path.resolve(__dirname, 'client'),
+  devtool: false,
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000
   },
   optimization: {
     splitChunks: {
@@ -45,38 +53,8 @@ const config = {
     },
     minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
   },
-  mode: 'production',
-  context: path.resolve(__dirname, 'client'),
-  devtool: false,
-  performance: {
-    hints: false,
-    maxEntrypointSize: 512000,
-    maxAssetSize: 512000
-  },
   module: {
     rules: [
-      {
-        test: /.html$/,
-        loader: StringReplacePlugin.replace({
-          replacements: [
-            {
-              pattern: /COMMITHASH/gi,
-              replacement: () => gitRevisionPlugin.commithash()
-            }
-          ]
-        })
-      },
-      {
-        test: /\.js$/,
-        loader: StringReplacePlugin.replace({
-          replacements: [
-            {
-              pattern: /COMMITHASH/gi,
-              replacement: () => gitRevisionPlugin.commithash()
-            }
-          ]
-        })
-      },
       {
         enforce: 'pre',
         test: /\.js$/,
@@ -201,12 +179,7 @@ const config = {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         use: [
           {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-              mimetype: 'application/font-woff',
-              name: 'fonts/[name].[ext]'
-            }
+            loader: 'file-loader'
           }
         ]
       },
@@ -214,12 +187,7 @@ const config = {
         test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/,
         use: [
           {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-              mimetype: 'application/octet-stream',
-              name: 'fonts/[name].[ext]'
-            }
+            loader: 'file-loader'
           }
         ]
       },
@@ -227,12 +195,7 @@ const config = {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         use: [
           {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-              mimetype: 'image/svg+xml',
-              name: 'images/[name].[ext]'
-            }
+            loader: 'file-loader'
           }
         ]
       }
@@ -240,8 +203,6 @@ const config = {
   },
 
   plugins: [
-    new StringReplacePlugin(),
-
     new webpack.LoaderOptionsPlugin({
       test: /\.js$/,
       options: {
@@ -262,12 +223,15 @@ const config = {
     }),
     new CopyWebpackPlugin([{ from: 'assets/images', to: 'images' }]),
     new CopyWebpackPlugin([{ from: 'assets/fonts', to: 'fonts' }]),
+
     new CopyWebpackPlugin([{ from: 'vendors', to: 'vendors' }]),
     new CopyWebpackPlugin([{ from: 'assets/manifest.json', to: 'manifest.json' }]),
+    new CopyWebpackPlugin([{ from: 'assets/robots.txt', to: 'robots.txt' }]),
+
     new CopyWebpackPlugin([
       {
         from: 'html.js',
-        to: 'html.js',
+        to: '../html.js',
         transform: (content) => {
           return content.toString().replace(/COMMITHASH/g, uuidv4())
         }

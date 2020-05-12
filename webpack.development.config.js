@@ -59,7 +59,7 @@ const config = {
     proxy: [
       {
         context: ['/api', '/auth', '/ws', '/js/variables.js', '/sockjs-node'],
-        target: 'http://[::1]:3000',
+        target: 'http://localhost:3000',
         secure: false,
         changeOrigin: true,
         ws: true
@@ -158,19 +158,6 @@ const config = {
         test: /\.(png|jpg|gif)$/,
         use: [
           {
-            loader: 'url-loader',
-            options: {
-              limit: 100,
-              mimetype: 'image/png',
-              name: 'images/[name].[ext]'
-            }
-          }
-        ]
-      },
-      {
-        test: /\.(png|jpg|gif)$/,
-        use: [
-          {
             loader: 'file-loader',
             options: {
               name: 'images/[name].[ext]'
@@ -193,12 +180,7 @@ const config = {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         use: [
           {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-              mimetype: 'application/font-woff',
-              name: 'fonts/[name].[ext]'
-            }
+            loader: 'file-loader'
           }
         ]
       },
@@ -206,12 +188,7 @@ const config = {
         test: /\.[ot]tf(\?v=\d+.\d+.\d+)?$/,
         use: [
           {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-              mimetype: 'application/octet-stream',
-              name: 'fonts/[name].[ext]'
-            }
+            loader: 'file-loader'
           }
         ]
       },
@@ -219,12 +196,7 @@ const config = {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         use: [
           {
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-              mimetype: 'image/svg+xml',
-              name: 'images/[name].[ext]'
-            }
+            loader: 'file-loader'
           }
         ]
       }
@@ -250,8 +222,11 @@ const config = {
     new CopyWebpackPlugin([{ from: 'assets/images', to: 'images' }]),
     new CopyWebpackPlugin([{ from: 'assets/fonts', to: 'fonts' }]),
     new CopyWebpackPlugin([{ from: 'index.html', to: 'index.html' }]),
+
     new CopyWebpackPlugin([{ from: 'vendors', to: 'vendors' }]),
     new CopyWebpackPlugin([{ from: 'assets/manifest.json', to: 'manifest.json' }]),
+    new CopyWebpackPlugin([{ from: 'assets/robots.txt', to: 'robots.txt' }]),
+
     new WebpackShellPlugin({ onBuildEnd: ['npm run watch:server'] }),
 
     new webpack.EnvironmentPlugin({
