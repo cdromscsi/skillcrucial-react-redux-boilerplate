@@ -51,7 +51,14 @@ const config = {
         }
       }
     },
-    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+    minimizer: [
+      new TerserJSPlugin({}),
+      new OptimizeCSSAssetsPlugin({
+        cssProcessorPluginOptions: {
+          preset: ['default', { discardComments: { removeAll: true } }]
+        }
+      })
+    ]
   },
   module: {
     rules: [
@@ -88,8 +95,7 @@ const config = {
               ident: 'postcss',
               plugins: (loader) => [
                 require('postcss-import')({ root: loader.resourcePath }),
-                require('autoprefixer')(),
-                require('cssnano')()
+                require('autoprefixer')()
               ]
             }
           }
@@ -122,8 +128,7 @@ const config = {
               ident: 'postcss',
               plugins: (loader) => [
                 require('postcss-import')({ root: loader.resourcePath }),
-                require('autoprefixer')(),
-                require('cssnano')()
+                require('autoprefixer')()
               ]
             }
           },
@@ -212,7 +217,6 @@ const config = {
         }
       }
     }),
-    new webpack.optimize.ModuleConcatenationPlugin(),
     new MiniCssExtractPlugin({
       filename: 'css/[name].css',
       chunkFilename: 'css/[id].css',
