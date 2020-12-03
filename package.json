@@ -4,6 +4,8 @@
   "description": "Boilerplate SkillCrucial",
   "main": "index.js",
   "scripts": {
+    "docker-start-dev": "docker-compose -f \"docker\\DEV.docker-compose.yml\" up",
+    "docker-stop-dev": "docker-compose -f \"docker\\DEV.docker-compose.yml\" down",
     "dev": "webpack-dev-server --mode development --config ./webpack.development.config.js --hot --open --disable-host-check",
     "dev:server": "webpack  --watch --config webpack.development.config.js",
     "start:dev": "webpack-dev-server --mode development --config ./webpack.development.config.js --hot --open",
@@ -18,7 +20,7 @@
     "coverage": "jest --coverage",
     "next:build": "next",
     "storybook": "start-storybook --port 6006",
-    "watch:server": "nodemon start.js --ignore \"*.hot-update.json\" --ignore \"js/bundle.js\" --ignore \"css/main.css\" --watch server --watch client --exec \"npm run lint:server --scripts-prepend-node-path && node\"",
+    "watch:server": "nodemon --legacy-watch start.js --ignore \"*.hot-update.json\" --ignore \"js/bundle.js\" --ignore \"css/main.css\" --watch server --watch client --exec \"npm run lint:server --scripts-prepend-node-path && node\"",
     "build:prod": "cross-env NODE_ENV=production webpack --config webpack.production.config.js --progress --profile --colors",
     "heroku-postbuild": "yarn run build:prod"
   },

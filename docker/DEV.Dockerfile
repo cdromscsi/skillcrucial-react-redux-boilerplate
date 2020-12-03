@@ -1,8 +1,7 @@
-#--------------------------------------STAGE 1-----------------------------
-FROM node:latest
-CMD [ "yarn","dev" ]
+FROM node:alpine
+CMD yarn dev
 WORKDIR /app
-VOLUME ./ ./
-# ADD package*.json ./
-RUN npm config set scripts-prepend-node-path true && yarn
+COPY package*.json ./
+RUN yarn install
+# npm config set scripts-prepend-node-path true &&
 # COPY . .

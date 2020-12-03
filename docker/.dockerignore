@@ -1,4 +1,5 @@
 .gitignore
-npm-debug.log
 .env
+docker
+.gitlab-ci.yml
 node_modules

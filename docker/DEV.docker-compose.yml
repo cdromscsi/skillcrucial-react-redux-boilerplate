@@ -5,5 +5,9 @@ services:
       context: ../
       dockerfile: docker/DEV.Dockerfile
     ports:
-      - 3000:3000
-    
+      - 3000:3001
+    restart: always
+    container_name: node-dev
+    volumes:
+      - ../.:/app:rw
+      - /app/node_modules
