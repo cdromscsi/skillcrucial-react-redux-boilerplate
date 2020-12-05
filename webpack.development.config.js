@@ -49,7 +49,7 @@ const config = {
     hot: true,
     contentBase: resolve(__dirname, 'dist/assets'),
     watchContentBase: true,
-    host: 'localhost',
+    host: process.platform === 'darwin' ? '0.0.0.0' : 'localhost',
     port: 3001,
 
     historyApiFallback: true,
