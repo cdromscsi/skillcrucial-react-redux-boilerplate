@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WebpackShellPlugin = require('webpack-shell-plugin')
 require('babel-polyfill')
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
 const config = {
   devtool: 'cheap-module-eval-source-map',
@@ -234,9 +233,6 @@ const config = {
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development'
     }),
-
-    new HardSourceWebpackPlugin(),
-
     new webpack.HotModuleReplacementPlugin()
   ]
 }
